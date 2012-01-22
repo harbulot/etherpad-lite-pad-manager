@@ -1,0 +1,121 @@
+PREREQUISITES
+
+Server Software:
+  Apache 2.2, mod_ssl optional
+  PHP 5.3 or greater
+  MySQL 5.1
+
+PHP Modules:
+  PDO with MySQL module  (http://www.php.net/manual/en/ref.pdo-mysql.php)
+  XSL  (http://www.php.net/manual/en/book.xsl.php)
+  curl
+
+
+CONFIGURING MYSQL
+
+1. Create a database and a user that can access the database:
+
+  mysql -u root -p
+  > create database notepad;
+  > grant all on notepad.* to notepad_user@'%';
+  > set password for notepad_user@'%' = PASSWORD('newpass');
+  > flush privileges;
+  > exit;
+
+2. Run the file sql/mysql.sql to create the necessary tables in the database:
+
+  mysql -u notepad_user -p --database=notepad < sql/mysql.sql
+
+3. Create a user in the new application:
+
+  mysql -u notepad_user -p --database=notepad
+  > insert into users (openid, nickname, created, is_enabled, is_manager) values ('http://your/openid', 'newuser', NOW(), 1, 1);
+  > exit;
+
+You will need to determine what your OpenID URL is. For Google and Yahoo, this 
+will change by the domain and will be impossible to predict. To determine what
+OpenID URL is, try logging in before creating an account and the application
+will insert your actual OpenID into the database and then you can run this
+command to enable yourself:
+
+  mysql -u notepad_user -p --database=notepad
+  > update users set is_manager = 1, is_enabled = 1;
+  > exit;
+
+
+CONFIGURING APACHE
+
+This program requires one things from Apache:
+
+  mod_php enabled
+  mod_proxy_http enabled
+
+These will *usually* be enabled as shared libraries. If that is the case, you
+should see lines such as these in your Apache configuration file:
+
+  LoadModule php5_module            modules/libphp5.so
+
+Configuring Apache is simple. Just take a look at the configuration example
+for Apache under configuration/httpd.conf. Change the contents of that file as
+appropriate and copy its contents to your Apache configuration files.
+
+
+CONFIGURING ETHERPAD
+
+In order to use the notepad, you must have Etherpad Lite installed and
+configured. This involves installing node.js. Download Etherpad Lite from here:
+
+  http://etherpad.org/
+
+Follow the installation guide and that should be it.
+
+
+CONFIGURING NOTEPAD
+
+Once you've done all that, modify the default notepad configuration file,
+called "default" to fill in your database username and password and the
+hostname and timezone information.
+
+When installing the Apache configuration file, you made a proxy declaration
+pointing to the installation of Etherpad. You will need to update the
+configuration file to work with this. The path to Etherpad will be whatever
+you set your proxy path to, plus an additional /p/. So for example:
+
+  ProxyPass /editor/ http://localhost:9001/
+  ProxyPassReverse /editor/ http://localhost:9001/
+
+Would have you set this:
+
+  pad = /editor/p/
+
+Whereas changing it to this:
+
+  ProxyPass /editor/ http://localhost:9001/
+  ProxyPassReverse /editor/ http://localhost:9001/
+
+Would have you set this:
+
+  pad = /notepad/editor/p/
+
+Additionally, there are two keys that must be given. The first is generated
+by the Etherpad software and is generally located in a file called APIKEY.txt.
+This needs to be put into the configuration file here:
+
+  apikey = asdf
+
+And the URL to the API must also be given. This is probably shouldn't be any
+different than the default:
+
+  apiurl = http://localhost:9001/api
+
+The final key is one that you make up but once you choose it, it cannot change
+without making it very difficult to load your notepads again. This key is used
+to group your public notepads together so that they can be found by all users:
+
+  public_group_key = foobar
+
+Just make this relatively unique; perhaps the domain name on which your site
+runs. It doesn't matter. Just don't make it the same as any OpenID logins or
+else there will be much confusion by the software as the OpenID login of each
+user is used to create that user's private group.
+

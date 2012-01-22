@@ -1,0 +1,17 @@
+# default information about the site
+url = pub.lockaby.org
+baseTZ = GMT
+siteTZ = America/New_York
+
+# database username/password
+db_username = notepad_user
+db_password = newpass
+db_database = notepad
+db_host = localhost
+
+# where is the pad located
+pad = /editor/p/
+apiurl = http://localhost:9001/api
+apikey = 
+public_group_key = 
+
