@@ -1,6 +1,6 @@
 BODY {
     background-color: #ffffff;
-    color: #000000;
+    color: #666666;
     font: 12px verdana,sans-serif;
     margin: 0px;
     padding: 0px;
@@ -9,7 +9,7 @@ BODY {
 }
 
 A {
-    color: #3300dd;
+    color: #666666;
     background-color: inherit;
     text-decoration: none;
 }
@@ -122,24 +122,57 @@ HR {
 }
 
 #entries input {
-    margin: 0px !important;
-    padding: 0px !important;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: -moz-linear-gradient(#FFFFFF, #F0F0F0);
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-color: #ccc !important;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+/*    border-color-ltr-source: physical;*/
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    cursor: pointer;
+/*    float: left;*/
+    height: 24px;
+    border-width: 1px;
+    margin-left: 3px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    color: #666666;
 }
 
 #entries select {
     margin: 0px !important;
     padding: 0px !important;
+    height:24px;
+    vertical-align: top;
+    margin-top: 4px;
 }
 
 #entries {
-    margin: 3px 0px 1px 7px;
+    color: #666666;
+    margin: 0px;
     padding: 0px;
+    height:32px;
+    background-image:-moz-linear-gradient(#F1F1F1, #F7F7F7 80%);
 }
 
 #entries div.list {
     float: left;
     text-align: left;
-    margin-right: 8px;
+    margin-right: 3px;
+    padding-left: 3px;
+    padding-top: 5px;
 }
 
 #entries div.list select {
@@ -161,7 +194,7 @@ HR {
     display: block;
     float: left;
     text-align: center;
-    margin: 1px 0px 1px 4px;
+    margin: 8px 0px 3px 0px;
     padding: 0px;
 }
 
@@ -267,5 +300,11 @@ div.manage div.row {
 
  div.manage div.row > div.user > div.clear {
     clear: both;
+}
+
+#frame{
+  border:0; !important;
+  padding:0; !important;
+  
 }
 

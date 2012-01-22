@@ -111,9 +111,10 @@ notepad.events.open = function (pad, group) {
 
                 jQuery('#frame').css({
                     float: 'left',
-                    border: '1px solid #aaaaaa',
+/*                  border: '1px solid #aaaaaa',
                     padding: '0px',
                     margin: '2px',
+*/
                 }).width('100%').load(function () {
                     notepad.spin.stop();
                 });
