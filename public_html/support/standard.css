@@ -121,6 +121,7 @@ HR {
     float: left;
 }
 
+/*
 #entries input {
     background-attachment: scroll;
     background-clip: border-box;
@@ -133,12 +134,10 @@ HR {
     border-color: #ccc !important;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-/*    border-color-ltr-source: physical;*/
     border-width: 1px;
     border-style: solid;
     border-radius: 4px;
     cursor: pointer;
-/*    float: left;*/
     height: 24px;
     border-width: 1px;
     margin-left: 3px;
@@ -149,6 +148,18 @@ HR {
     padding-right: 5px;
     padding-top: 0px;
     color: #666666;
+    width: 24px;
+}
+*/
+
+#entries input {
+/*    background-image: url("admin_icons.png");*/
+    border:0;
+    height:16px;
+    width:16px;
+    margin-top:2px;
+    margin-left:3px;
+    background-color:transparent;
 }
 
 #entries select {
@@ -182,7 +193,7 @@ HR {
 #entries div.menu {
     float: right;
     text-align: right;
-    margin: 2px 7px 0px 0px;
+    margin: 5px 3px 0px 0px;
 }
 
 #entries div.clear {
@@ -302,9 +313,54 @@ div.manage div.row {
     clear: both;
 }
 
-#frame{
-  border:0; !important;
-  padding:0; !important;
-  
+
+.buttonli{
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: -moz-linear-gradient(#FFFFFF, #F0F0F0);
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-color: #ccc !important;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+/*    border-color-ltr-source: physical;*/
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 4px;
+    cursor: pointer;
+/*    float: left;*/
+    height: 22px;
+    border-width: 1px;
+    margin-left: 2px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+/*    padding-bottom: 8px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+*/
+    color: #666666;
+    width: 22px;
+    display: inline-block;
 }
 
+.AdminIcon{
+    background-image: url('admin_icons.png');
+}
+
+.buttonicon{
+    display:inline;
+}
+
+.list form{
+    font-size:0px;
+}
+
+.RightButtons{
+  font-size:0px;
+  display:inline-block;
+  text-align:left;
+}

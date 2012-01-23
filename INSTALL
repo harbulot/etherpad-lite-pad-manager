@@ -7,9 +7,8 @@ Server Software:
 
 PHP Modules:
   PDO with MySQL module  (http://www.php.net/manual/en/ref.pdo-mysql.php)
-  XSL  (http://www.php.net/manual/en/book.xsl.php)
-  curl
-
+  XSL  (http://www.php.net/manual/en/book.xsl.php) -- apt-get install php5xml
+  curl -- apt-get install curl
 
 CONFIGURING MYSQL
 

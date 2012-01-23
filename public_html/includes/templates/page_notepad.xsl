@@ -87,18 +87,41 @@
                             </xsl:for-each>
                         </optgroup>
                     </select>
-                    <input type="submit" value="Open"/>
-                    <input type="button" name="delete" value="Delete"/>
+                    <li class="buttonli"><a title="Open this pad">
+                        <div class="buttonicon">
+                            <input type="submit" class="AdminIcon" value="" style="background-position:0px 18px;"/>
+                        </div></a>
+                    </li>
+                    <li class="buttonli"><a title="Delete this pad">
+                        <div class="buttonicon">
+                            <input type="button" name="delete" class="AdminIcon" value="" style="background-position:0px 1px;"/>
+                        </div></a>
+                    </li>
                 </form>
             </div>
             <div class="working"><img src="support/spinning.gif" alt=""/></div>
             <div class="menu">
-                <a id="username" href="javascript:void(0);" onclick="notepad.events.profile.open();"><xsl:value-of select="/template/editor/user/nickname"/></a> | 
                 <xsl:if test="/template/editor/user/@manager = 1">
-                    <a href="javascript:void(0);" onclick="notepad.events.manage.open();">manage</a> | 
+                    <a href="javascript:void(0);" onclick="notepad.events.manage.open();">manage</a> |
                 </xsl:if>
-                <a href="javascript:void(0);" onclick="notepad.events.create.open();">new</a> | 
-                <a href="logout.php">logout</a>
+
+                <div class="RightButtons">
+                        <li class="buttonli"><a title="Settings and profile" href="javascript:void(0);" onclick="notepad.events.profile.open();">
+                            <div class="buttonicon">
+                                <input type="button" name="Settings and profile" class="AdminIcon" value="" style="background-position:0px 69px"/>
+                            </div></a>
+                        </li>
+                        <li class="buttonli"><a title="New Pad" onClick="notepad.events.create.open();">
+                            <div class="buttonicon">
+                                <input type="button" name="New Pad" class="AdminIcon" value="" style="background-position:0px 69px;"/>
+                            </div></a>
+                        </li>
+                        <li class="buttonli"><a title="Logout" href="logout.php">
+                            <div class="buttonicon">
+                                <input type="button" name="Logout" class="AdminIcon" value="" style="background-position:0px 50px;"/>
+                            </div></a>
+                        </li>
+                   </div>
             </div>
             <div class="clear"></div>
         </div>

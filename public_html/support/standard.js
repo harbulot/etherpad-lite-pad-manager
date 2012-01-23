@@ -111,6 +111,7 @@ notepad.events.open = function (pad, group) {
 
                 jQuery('#frame').css({
                     float: 'left',
+                    border: '0px'
 /*                  border: '1px solid #aaaaaa',
                     padding: '0px',
                     margin: '2px',
