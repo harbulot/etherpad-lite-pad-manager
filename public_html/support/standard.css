@@ -364,3 +364,7 @@ div.manage div.row {
   display:inline-block;
   text-align:left;
 }
+
+#entries li:hover{
+  background: #fff;
+}
