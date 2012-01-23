@@ -92,7 +92,7 @@
                             <input type="submit" class="AdminIcon" value="" style="background-position:0px 18px;"/>
                         </div></a>
                     </li>
-                    <li class="buttonli"><a title="Delete this pad">
+                    <li class="buttonli" id="DeleteIcon"><a title="Delete this pad">
                         <div class="buttonicon">
                             <input type="button" name="delete" class="AdminIcon" value="" style="background-position:0px 1px;"/>
                         </div></a>

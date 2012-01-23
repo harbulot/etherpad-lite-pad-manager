@@ -121,51 +121,18 @@ HR {
     float: left;
 }
 
-/*
 #entries input {
-    background-attachment: scroll;
-    background-clip: border-box;
-    background-color: transparent;
-    background-image: -moz-linear-gradient(#FFFFFF, #F0F0F0);
-    background-origin: padding-box;
-    background-position: 0 0;
-    background-repeat: repeat;
-    background-size: auto auto;
-    border-color: #ccc !important;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 4px;
-    cursor: pointer;
-    height: 24px;
-    border-width: 1px;
-    margin-left: 3px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    padding-bottom: 4px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-top: 0px;
-    color: #666666;
-    width: 24px;
-}
-*/
-
-#entries input {
-/*    background-image: url("admin_icons.png");*/
     border:0;
     height:16px;
     width:16px;
-    margin-top:2px;
-    margin-left:3px;
+    margin-left:1px;
     background-color:transparent;
 }
 
 #entries select {
     margin: 0px !important;
     padding: 0px !important;
-    height:24px;
+    height:27px;
     vertical-align: top;
     margin-top: 4px;
 }
@@ -174,7 +141,7 @@ HR {
     color: #666666;
     margin: 0px;
     padding: 0px;
-    height:32px;
+    height:33px;
     background-image:-moz-linear-gradient(#F1F1F1, #F7F7F7 80%);
 }
 
@@ -183,7 +150,7 @@ HR {
     text-align: left;
     margin-right: 3px;
     padding-left: 3px;
-    padding-top: 5px;
+    padding-top: 3px;
 }
 
 #entries div.list select {
@@ -193,7 +160,7 @@ HR {
 #entries div.menu {
     float: right;
     text-align: right;
-    margin: 5px 3px 0px 0px;
+    margin: 3px 3px 0px 0px;
 }
 
 #entries div.clear {
@@ -332,7 +299,7 @@ div.manage div.row {
     border-radius: 4px;
     cursor: pointer;
 /*    float: left;*/
-    height: 22px;
+    height: 18px;
     border-width: 1px;
     margin-left: 2px;
     overflow-x: hidden;
@@ -343,12 +310,15 @@ div.manage div.row {
     padding-top: 1px;
 */
     color: #666666;
-    width: 22px;
+    width: 18px;
     display: inline-block;
+    padding:3px 3px 3px 3px;
 }
 
 .AdminIcon{
     background-image: url('admin_icons.png');
+    cursor:pointer;
+    cursor:hand;
 }
 
 .buttonicon{
@@ -367,4 +337,8 @@ div.manage div.row {
 
 #entries li:hover{
   background: #fff;
+}
+
+#DeleteIcon:hover{
+  background: #E7326D !important;
 }
