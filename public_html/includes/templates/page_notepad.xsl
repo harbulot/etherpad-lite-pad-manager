@@ -89,12 +89,12 @@
                     </select>
                     <li class="buttonli"><a title="Open this pad">
                         <div class="buttonicon">
-                            <input type="submit" class="AdminIcon" value="" style="background-position:0px 18px;"/>
+                            <input type="submit" class="AdminIcon" value="" style="background-position:0px 34px;"/>
                         </div></a>
                     </li>
                     <li class="buttonli" id="DeleteIcon"><a title="Delete this pad">
                         <div class="buttonicon">
-                            <input type="button" name="delete" class="AdminIcon" value="" style="background-position:0px 1px;"/>
+                            <input type="button" name="delete" class="AdminIcon" value="" style="background-position:0px 52px;"/>
                         </div></a>
                     </li>
                 </form>
@@ -113,12 +113,12 @@
                         </li>
                         <li class="buttonli"><a title="New Pad" onClick="notepad.events.create.open();">
                             <div class="buttonicon">
-                                <input type="button" name="New Pad" class="AdminIcon" value="" style="background-position:0px 69px;"/>
+                                <input type="button" name="New Pad" class="AdminIcon" value="" style="background-position:0px 0px;"/>
                             </div></a>
                         </li>
                         <li class="buttonli"><a title="Logout" href="logout.php">
                             <div class="buttonicon">
-                                <input type="button" name="Logout" class="AdminIcon" value="" style="background-position:0px 50px;"/>
+                                <input type="button" name="Logout" class="AdminIcon" value="" style="background-position:0px 17px;"/>
                             </div></a>
                         </li>
                    </div>
