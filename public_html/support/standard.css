@@ -293,26 +293,23 @@ div.manage div.row {
     border-color: #ccc !important;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-/*    border-color-ltr-source: physical;*/
     border-width: 1px;
     border-style: solid;
     border-radius: 4px;
     cursor: pointer;
-/*    float: left;*/
     height: 18px;
     border-width: 1px;
     margin-left: 2px;
     overflow-x: hidden;
     overflow-y: hidden;
-/*    padding-bottom: 8px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-top: 1px;
-*/
     color: #666666;
     width: 18px;
+    display:list-item;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
     display: inline-block;
-    padding:3px 3px 3px 3px;
+    padding:4px 5px;
 }
 
 .AdminIcon{
