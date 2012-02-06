@@ -1,5 +1,5 @@
 # default information about the site
-url = babybounce.co.uk
+url = yoururlhere.com
 baseTZ = GMT
 siteTZ = America/New_York
 
@@ -12,5 +12,5 @@ db_host = localhost
 # where is the pad located
 pad = /editor/p/
 apiurl = http://localhost:9001/api
-apikey = bIvFqVJrFK1rgIETdO9krXptZDWakVg6
+apikey = INSERTYOURKEYHERE
 public_group_key = skdjfklsdjklfjsd
