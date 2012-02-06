@@ -1,17 +1,16 @@
 # default information about the site
-url = pub.lockaby.org
+url = babybounce.co.uk
 baseTZ = GMT
 siteTZ = America/New_York
 
 # database username/password
-db_username = notepad_user
-db_password = newpass
+db_username = root
+db_password = potnoodle
 db_database = notepad
 db_host = localhost
 
 # where is the pad located
 pad = /editor/p/
 apiurl = http://localhost:9001/api
-apikey = 
-public_group_key = 
-
+apikey = bIvFqVJrFK1rgIETdO9krXptZDWakVg6
+public_group_key = skdjfklsdjklfjsd

@@ -1,15 +1,22 @@
+@media screen and (max-device-width: 480px){
+  body{
+    -webkit-text-size-adjust: none;
+  }
+}
+
 BODY {
     background-color: #ffffff;
-    color: #666666;
-    font: 12px verdana,sans-serif;
+    color: #000000;
+    font-size: 1em;
+    font-family: verdana,sans-serif;
+    width: 100%;
     margin: 0px;
     padding: 0px;
-    width: 100%;
     overflow: hidden;
 }
 
 A {
-    color: #666666;
+    color: #3300dd;
     background-color: inherit;
     text-decoration: none;
 }
@@ -30,7 +37,20 @@ HR {
     margin: 1px 0px 4px 0px;
 }
 
+#homepage {
+    margin-top: 30px;
+}
+
+#homepage > div.title {
+    margin: 0px auto;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    font-family: verdana,sans-serif;
+}
+
 #content {
+    font-size: 0.72em;
     padding: 0px;
     margin: 0px auto;
 }
@@ -38,81 +58,41 @@ HR {
 #title {
     text-align: center;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 2.25em;
     font-family: sans-serif;
+    width: 530px;
     margin: 0px auto 10px auto;
-    width: 350px;
 }
 
 #login {
-    width: 500px;
     margin: 0px auto;
 }
 
-#login .error {
+#login div.information {
+    margin: 8px 0px;
+    text-align: center;
+}
+
+#login div.errors {
     text-align: center;
     color: red;
     font-weight: bold;
     margin: 5px 0px;
 }
 
-#login .label {
-    float: left;
-    text-align: right;
-    width: 65px;
-    margin: 2px 0px;
-    padding: 0px 2px;
-}
-
-#login .input {
-    float: left;
-    text-align: left;
-    margin: 2px 0px;
-    padding: 0px;
-}
-
-#login input[type="submit"] {
-    margin: 4px;
-    width: 60px;
-}
-
-#header {
-    width: 610px;
+#login div.boxes {
     margin: 0px auto;
-    padding: 2px;
+    width: 330px;
 }
 
-#openid_form {
-    margin: 0px auto;
-    text-align: center;
-}
-
-#openid_form div.buttons {
-    float: left;
-    left: 50%;
-    position: relative;
-}
-
-#openid_form div.buttons div.center {
-    float: left;
-    left: -50%;
-    position: relative;
-}
-
-#openid_form div.buttons div.button {
-    float: left;
+#login div.box {
+    width: 102px;
     padding: 3px 3px 3px 4px;
+    margin: 0px auto;
+    float: left;
 }
 
-#openid_form div.buttons div.nohighlight {
-    background: #fcfcfc;
-}
-
-#openid_form div.buttons div.highlight {
-    background: #fffcc9;
-}
-
-#openid_form div.buttons a {
+#login div.box > a {
     width: 100px;
     height: 60px;
     padding: 0px;
@@ -121,37 +101,79 @@ HR {
     float: left;
 }
 
+#login div.highlight {
+    background: #fffcc9;
+}
+
+#login div.nohighlight {
+    background: #fcfcfc;
+}
+
+#login .input {
+    text-align: center;
+    margin: 2px auto 5px auto;
+    padding: 0px;
+    width: 190px;
+}
+
+#login input[type="text"] {
+    width: 180px;
+}
+
+#login input[type="submit"] {
+    margin: 4px;
+    width: 60px;
+}
+
+#header {
+    width: 530px;
+    margin: 0px auto;
+    padding: 2px;
+}
+
+#header div.username {
+    float: left;
+}
+
+#header div.logout {
+    float: right;
+    text-align: right;
+}
+
+#header div.clear {
+    clear: both;
+}   
+
+#message {
+    padding: 0px;
+    margin: 0px;
+    font-size: 2em;
+    font-family: sans-serif;
+    text-align: center;
+    width: 100%;
+    z-index: 1000;
+    position: absolute;
+}
+
 #entries input {
-    border:0;
-    height:16px;
-    width:16px;
-    margin-left:1px;
-    background-color:transparent;
+    margin: 0px !important;
+    padding: 0px !important;
 }
 
 #entries select {
     margin: 0px !important;
     padding: 0px !important;
-    height:27px;
-    vertical-align: top;
-    margin-top: 4px;
 }
 
 #entries {
-    color: #666666;
-    margin: 0px;
+    margin: 3px 0px 0px 2px;
     padding: 0px;
-    height:33px;
-    background-image:-moz-linear-gradient(#F1F1F1, #F7F7F7 80%);
-    background-image:-webkit-linear-gradient(top, rgb(247, 247, 247), rgb(241, 241, 241) 80%);
 }
 
 #entries div.list {
     float: left;
     text-align: left;
-    margin-right: 3px;
-    padding-left: 3px;
-    padding-top: 3px;
+    margin-right: 8px;
 }
 
 #entries div.list select {
@@ -161,7 +183,7 @@ HR {
 #entries div.menu {
     float: right;
     text-align: right;
-    margin: 3px 3px 0px 0px;
+    margin: 2px 7px 0px 0px;
 }
 
 #entries div.clear {
@@ -173,7 +195,7 @@ HR {
     display: block;
     float: left;
     text-align: center;
-    margin: 8px 0px 3px 0px;
+    margin: 1px 0px 1px 4px;
     padding: 0px;
 }
 
@@ -184,18 +206,13 @@ HR {
     padding: 0px;
 }
 
-#message {
-    padding: 0px;
-    margin: 0px;
-    font-size: 24px;
-    font-family: sans-serif;
-    text-align: center;
-    width: 100%;
-    z-index: 1000;
-    position: absolute;
+div.profile {
+    font-size: 1em;
 }
 
- div.profile div.label,  div.create div.label {
+div.profile div.label,
+div.create div.label,
+div.rename div.label {
     width: 100px;
     font-weight: bold;
     text-align: right;
@@ -204,33 +221,52 @@ HR {
     margin: 0px 0px 8px 0px;
 }
 
- div.profile div.value,  div.create div.value {
+div.profile div.value,
+div.create div.value,
+div.rename div.value {
     text-align: left;
     float: left;
     margin: 0px 0px 0px 6px;
 }
 
- div.profile div.value input[type="text"],  div.create div.value input[type="text"] {
+div.profile div.value input[type="text"],
+div.create div.value input[type="text"],
+div.rename div.value input[type="text"] {
     width: 175px;
 }
 
- div.profile div.clear,  div.create div.clear {
+div.profile div.clear,
+div.create div.clear,
+div.rename div.clear {
     clear: both;
 }
 
- div.create div.private {
-    text-align: center;
-}
-
- div.profile div.openid {
+div.profile div.openid {
     text-align: center;
     margin-bottom: 15px;
 }
 
+div.create,
+div.rename {
+    font-size: 1em;
+}
+
+div.create div.private,
+div.rename div.private {
+    text-align: center;
+}
+
 div.manage {
-    font-size: 12px;
+    font-size: 1em;
+}
+
+div.manage {
     margin-bottom: 0px;
     padding-bottom: 0px;
+}
+
+div.manage > form {
+    overflow: auto;
 }
 
 div.manage div.header {
@@ -246,97 +282,32 @@ div.manage div.row {
     margin: 0px auto 8px auto;
 }
 
- div.manage div.template {
+div.manage div.template {
     display: none;
 }
 
- div.manage div.header > div.username,  div.manage div.row div.user {
+div.manage div.header > div.username,
+div.manage div.row div.user {
     text-align: left;
     float: left;
 }
 
- div.manage div.header > div.is,  div.manage div.row div.is {
+div.manage div.header > div.is,
+div.manage div.row div.is {
     width: 100px;
     text-align: center;
     float: right;
 }
 
- div.manage div.header > div.clear,  div.manage div.row div.clear {
+div.manage div.header > div.clear,
+div.manage div.row div.clear {
     clear: both;
 }
 
- div.manage div.row > div.user {
+div.manage div.row > div.user {
     width: 297px;
 }
 
- div.manage div.row > div.user > div.username {
-    float: left;
-}
-
- div.manage div.row > div.user > div.password {
-    float: right;
-}
-
- div.manage div.row > div.user > div.clear {
-    clear: both;
-}
-
-
-.buttonli{
-    background-attachment: scroll;
-    background-clip: border-box;
-    background-color: transparent;
-    background-image: -moz-linear-gradient(#FFFFFF, #F0F0F0);
-    background-origin: padding-box;
-    background-position: 0 0;
-    background-repeat: repeat;
-    background-size: auto auto;
-    border-color: #ccc !important;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 4px;
-    cursor: pointer;
-    height: 18px;
-    border-width: 1px;
-    margin-left: 2px;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    color: #666666;
-    width: 18px;
-    display:list-item;
-    list-style-image: none;
-    list-style-position: outside;
-    list-style-type: none;
-    display: inline-block;
-    padding:4px 5px;
-}
-
-.AdminIcon{
-    background-image: url('admin_icons.png');
-    cursor:pointer;
-    cursor:hand;
-}
-
-.buttonicon{
-    display:inline;
-}
-
-.list form{
-    font-size:0px;
-}
-
-.RightButtons{
-  font-size:0px;
-  display:inline-block;
-  text-align:left;
-}
-
-#entries li:hover{
-  background: #fff;
-}
-
-#DeleteIcon:hover{
-  background: #E7326D !important;
+.ui-widget {
+    font-size: 0.75em;
 }

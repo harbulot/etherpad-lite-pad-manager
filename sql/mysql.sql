@@ -40,3 +40,14 @@ CREATE TABLE `store` (
   `value` longtext NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `pads` (
+  `id` varchar(128) NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `is_private` int(1) NOT NULL DEFAULT '0',
+  `user_id` int(32) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pads_user_fk` (`user_id`),
+  CONSTRAINT `pads_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

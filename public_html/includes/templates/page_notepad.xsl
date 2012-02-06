@@ -10,7 +10,7 @@
                     <form autocomplete="off" method="POST" name="toggle">
                         <div class="users">
                             <div class="header">
-                                <div class="username">Username</div>
+                                <div class="username">Nickname/Username</div>
                                 <div class="is">Is manager?</div>
                                 <div class="is">Is enabled?</div>
                                 <div class="clear"></div>
@@ -22,8 +22,8 @@
                     <div class="template">
                         <div class="row">
                             <div class="user">
-                                <div class="username"></div>
-                                <div class="clear"></div>
+                                Nickname: <span class="nickname"></span><br/>
+                                <span class="username"></span><br/>
                             </div>
                             <div class="is">
                                 <input type="checkbox" name="is_manager"/>
@@ -38,9 +38,9 @@
             </xsl:if>
             <div class="create">
                 <br/>
-                <div class="label">Pad Name:</div>
+                <div class="label">Name:</div>
                 <div class="value">
-                    <input type="text" name="pad" value=""/>
+                    <input type="text" name="name" value=""/>
                 </div>
                 <div class="clear"></div>
 
@@ -48,6 +48,22 @@
                     <label for="create_private">Check to make private:</label>
                     <input type="checkbox" name="private" id="create_private" checked="checked"/>
                 </div>
+            </div>
+            <div class="rename">
+                <br/>
+                <div class="label">New name:</div>
+                <div class="value">
+                    <input type="text" name="name" value=""/>
+                </div>
+                <div class="clear"></div>
+
+                <div class="private">
+                    <label for="rename_private">Check to make private:</label>
+                    <input type="checkbox" name="private" id="rename_private" checked="checked"/>
+                </div>
+
+                <!-- a place to store the id of what we are renaming -->
+                <input type="hidden" name="id" value=""/>
             </div>
             <div class="profile">
                 <div class="openid">
@@ -68,60 +84,39 @@
         <div id="entries">
             <div class="list">
                 <form autocomplete="off">
+                    <input type="button" name="new" value="New"/>
+                    <xsl:text> </xsl:text>
                     <select size="1" name="name">
                         <option value="">Select a notepad...</option>
                         <optgroup label="Public Notepads" class="public">
-                            <xsl:if test="count(/template/entries/public/entry) = 0">
+                            <xsl:if test="count(/template/notepads/public/notepad) = 0">
                                 <option value="">No public notepads found.</option>
                             </xsl:if>
-                            <xsl:for-each select="/template/entries/public/entry">
-                                <option value="{@key}"><xsl:value-of select="."/></option>
+                            <xsl:for-each select="/template/notepads/public/notepad">
+                                <option value="{@id}"><xsl:value-of select="."/></option>
                             </xsl:for-each>
                         </optgroup>
                         <optgroup label="Private Notepads" class="private">
-                            <xsl:if test="count(/template/entries/private/entry) = 0">
+                            <xsl:if test="count(/template/notepads/private/notepad) = 0">
                                 <option value="">No private notepads found.</option>
                             </xsl:if>
-                            <xsl:for-each select="/template/entries/private/entry">
-                                <option value="{@key}"><xsl:value-of select="."/></option>
+                            <xsl:for-each select="/template/notepads/private/notepad">
+                                <option value="{@id}"><xsl:value-of select="."/></option>
                             </xsl:for-each>
                         </optgroup>
                     </select>
-                    <li class="buttonli"><a title="Open this pad">
-                        <div class="buttonicon">
-                            <input type="submit" class="AdminIcon" value="" style="background-position:0px 34px;"/>
-                        </div></a>
-                    </li>
-                    <li class="buttonli" id="DeleteIcon"><a title="Delete this pad">
-                        <div class="buttonicon">
-                            <input type="button" name="delete" class="AdminIcon" value="" style="background-position:0px 52px;"/>
-                        </div></a>
-                    </li>
+                    <input type="submit" value="Open"/>
+                    <input type="button" name="rename" value="Rename"/>
+                    <input type="button" name="delete" value="Delete"/>
                 </form>
             </div>
             <div class="working"><img src="support/spinning.gif" alt=""/></div>
             <div class="menu">
+                <a id="username" href="javascript:void(0);" onclick="notepad.events.profile.open();"><xsl:value-of select="/template/editor/user/nickname"/></a> | 
                 <xsl:if test="/template/editor/user/@manager = 1">
-                    <a href="javascript:void(0);" onclick="notepad.events.manage.open();">manage</a> |
+                    <a href="javascript:void(0);" onclick="notepad.events.manage.open();">manage</a> | 
                 </xsl:if>
-
-                <div class="RightButtons">
-                        <li class="buttonli"><a title="Settings and profile" href="javascript:void(0);" onclick="notepad.events.profile.open();">
-                            <div class="buttonicon">
-                                <input type="button" name="Settings and profile" class="AdminIcon" value="" style="background-position:0px 69px"/>
-                            </div></a>
-                        </li>
-                        <li class="buttonli"><a title="New Pad" onClick="notepad.events.create.open();">
-                            <div class="buttonicon">
-                                <input type="button" name="New Pad" class="AdminIcon" value="" style="background-position:0px 0px;"/>
-                            </div></a>
-                        </li>
-                        <li class="buttonli"><a title="Logout" href="logout.php">
-                            <div class="buttonicon">
-                                <input type="button" name="Logout" class="AdminIcon" value="" style="background-position:0px 17px;"/>
-                            </div></a>
-                        </li>
-                   </div>
+                <a href="logout.php">logout</a>
             </div>
             <div class="clear"></div>
         </div>
@@ -133,26 +128,56 @@
                                    '<xsl:value-of select="/template/editor/user/nickname"/>');
 
                 // set up the default content
-                jQuery('#frame').html(notepad.events.clear());
+                jQuery('#frame').html(notepad.clear());
 
-                // tie the "delete" and "open" buttons
+                // open a notepad on submission on the form
                 jQuery('#entries div.list form').submit(function (event) {
                     event.preventDefault();
                     var form = jQuery(this).closest('form');
-                    var pad = jQuery(form).find('select[name="name"]').val();
-                    var group = jQuery(form).find('option:selected').closest('optgroup').attr('class');
-                    notepad.events.open(pad, group);
+                    var id = jQuery(form).find('select[name="name"]').val();
+                    if (id) {
+                        notepad.open(id);
+                    } else {
+                        alert('You must select a notepad before trying to open it.');
+                    }
                 });
+
+                // delete a notepad
                 jQuery('#entries div.list form input[name="delete"]').click(function (event) {
                     event.preventDefault();
                     var form = jQuery(this).closest('form');
-                    var pad = jQuery(form).find('select[name="name"]').val();
-                    var group = jQuery(form).find('option:selected').closest('optgroup').attr('class');
-                    notepad.events.destroy(pad, group);
+                    var id = jQuery(form).find('select[name="name"]').val();
+                    var name = jQuery(form).find('select[name="name"] option[value="' + id + '"]').text();
+                    if (id) {
+                        if (confirm('Are you sure you want to delete the pad named "' + name + '".')) {
+                            notepad.destroy(id);
+                        }
+                    } else {
+                        alert('You must select a notepad before trying to delete it.');
+                    }
+                });
+
+                // rename a notepad
+                jQuery('#entries div.list form input[name="rename"]').click(function (event) {
+                    event.preventDefault();
+                    var form = jQuery(this).closest('form');
+                    var id = jQuery(form).find('select[name="name"]').val();
+                    if (id) {
+                        notepad.events.rename.open(id);
+                    } else {
+                        alert('You must select a notepad before trying to rename it.');
+                    }
+                });
+
+                // create a new notepad
+                jQuery('#entries div.list form input[name="new"]').click(function (event) {
+                    event.preventDefault();
+                    notepad.events.create.open();
                 });
 
                 // create the dialogs
                 notepad.events.create.create();
+                notepad.events.rename.create();
                 notepad.events.profile.create();
 
                 <xsl:if test="/template/editor/user/@manager = 1">
@@ -161,7 +186,7 @@
                 </xsl:if>
 
                 // if the window resizes, make sure that the editor is the same size as the window
-                jQuery(window).resize(notepad.events.resize);
+                jQuery(window).resize(notepad.resize);
                 jQuery(window).trigger('resize');
             });
         </script>

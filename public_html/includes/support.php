@@ -31,31 +31,43 @@ function get_openid_providers_hash() {
     return $hash;
 }
 
-function get_notepad_entries($ep, $group_id = null) {
-    # get the list of notepads
-    $pad_list = Array();
-    try {
-        $pad_list = $ep->listPads($group_id);
-        $pad_list = $pad_list->padIDs;
-    } catch (Exception $e) {}
-
-    # build the list of notepads
-    $entries = array();
-
-    foreach ($pad_list as $pad => $key) {
-        $pad_name_pieces = explode('$', $pad, 2);
-        $pad_name = $pad_name_pieces[1];
-        array_push($entries, $pad_name);
-    }
-
-    return $entries;
+function get_public_notepads() {
+    return get_notepads(0);
 }
 
-function get_notepad_entries_xml($ep, $group_id = null) {
+function get_private_notepads() {
+    return get_notepads(1);
+}
+
+function get_notepads($privacy = null) {
+    global $dbh, $ep;
+    $notepads = Array();
+
+    $sth = $dbh->prepare('SELECT id, name, is_private FROM pads WHERE is_private = 0 OR (is_private = 1 AND user_id = ?) ORDER BY name ASC');
+    $sth->execute(array($_SESSION['user_id']));
+    while (list($id, $name, $is_private) = $sth->fetch()) {
+        if ($is_private == $privacy || $privacy === null) {
+            array_push($notepads, array($id, $name));
+        }
+    }
+    $sth->closeCursor();
+
+    return $notepads;
+}
+
+function get_public_notepads_xml() {
+    return get_notepads_xml(0);
+}
+
+function get_private_notepads_xml() {
+    return get_notepads_xml(1);
+}
+
+function get_notepads_xml($privacy = null) {
     $xml = '';
-    $notepads = get_notepad_entries($ep, $group_id);
+    $notepads = get_notepads($privacy);
     foreach ($notepads as $value) {
-        $xml .= '<entry key="' . htmlspecialchars($value) . '">' . htmlspecialchars($value) . '</entry>';
+        $xml .= '<notepad id="' . htmlspecialchars($value[0]) . '"><![CDATA[' . htmlspecialchars($value[1]) . ']]></notepad>';
     }
     return $xml;
 }

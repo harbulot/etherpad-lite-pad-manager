@@ -22,7 +22,9 @@ $db = new org\lockaby\db;
 $dbh = $db->connect($values['db_database'], $values['db_username'], $values['db_password']);
 
 $session = new org\lockaby\session($dbh);
-session_start();
+$session->setName('NOTEPAD_SESSION');
+$session->setPath('/');
+$session->start();
 
 # check to see if there is an autologin cookie here
 # if autologin exists then redirect to editor.php
@@ -37,20 +39,22 @@ try {
     $openid = new org\lockaby\openid($values['url']);
     $openid->realm = (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
 
+    # the url we will redirect to, if any
+    $redirect = null;
+
     if (!$openid->mode) {
         if (isset($_POST['provider'])) {
             # get the provider, the url, and the username
             $providers = get_openid_providers_hash();
-            $provider = $_POST['provider'];
+            $provider = stripslashes($_POST['provider']);
             $id = $providers[$provider]['url'];
-            if (!$id) { $id = $_POST['username']; }
+            if (!$id) { $id = stripslashes($_POST['username']); }
             $openid->identity = $id;
 
             # we will use this later
             $_SESSION['remember'] = isset($_POST['remember']);
 
-            header('Location: ' . $openid->authUrl());
-            exit;
+            $redirect = $openid->authUrl();
         }
     } elseif ($openid->mode == 'cancel') {
         throw new Exception('You cancelled your login.');
@@ -65,7 +69,7 @@ try {
             $get_id_sth->closeCursor();
 
             if (!$user_id) {
-                $create_user_sth = $dbh->prepare('INSERT INTO users (openid, created, is_manager, is_enabled) VALUES (LOWER(?), NOW(), 0, 1)');
+                $create_user_sth = $dbh->prepare('INSERT INTO users (openid, created, is_manager, is_enabled) VALUES (LOWER(?), NOW(), 0, 0)');
                 $create_user_sth->execute(array($username));
                 $create_user_sth->closeCursor();
                 throw new Exception("Your account has been registered but is not yet enabled. Please ask the administrator to enable your access before logging in again.");
@@ -109,19 +113,22 @@ try {
                 $save_secret_sth->execute(array($user_id, $secret, time() + $expires));
                 $save_secret_sth->closeCursor();
 
-                setcookie('OPENID_AUTOLOGIN', base64_encode(gzcompress(serialize(array(secret => $secret, username => $username)))),
-                          time() + $expires, '/notepad', null, true, true);
+                setcookie('OPENID_AUTOLOGIN', base64_encode(gzcompress(serialize(array(secret => $secret, username => $username)))), time() + $expires, '/', null, true, true);
             }
 
-            header('Location: editor.php');
-            exit;
+            $redirect = "editor.php";
         } else {
             # nopers
             throw new Exception('You were not logged in.');
         }
     }
+
+    if ($redirect !== null) {
+        header('Location: ' . $redirect);
+        exit;
+    }
 } catch (Exception $e) {
-    array_push($errors, '<error>' . $e->getMessage() . '</error>');
+    array_push($errors, '<error>' . stripslashes($e->getMessage()) . '</error>');
 }
 
 # now display a login form here

@@ -7,9 +7,13 @@
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-                <link REL="stylesheet" TYPE="text/css" HREF="support/standard.css"/>
+                <meta http-equiv="Content-Language" content="en"/>
+                <meta name="ROBOTS" content="NOINDEX, NOFOLLOW"/>
+                <meta name="viewport" content="width=device-width,height=device-height,maximum-scale=1,user-scalable=no"/>
                 <link REL="stylesheet" TYPE="text/css" HREF="support/resources/jqueryui/jquery-ui-current.css"/>
+                <link REL="stylesheet" TYPE="text/css" HREF="support/standard.css"/>
                 <script type="text/javascript" src="support/resources/jquery/jquery-current.js"></script>
+                <script type="text/javascript" src="support/resources/jquery/plugins/jquery.cookie.js"></script>
                 <script type="text/javascript" src="support/resources/jqueryui/jquery-ui-current.js"></script>
                 <script type="text/javascript" src="support/standard.js"></script>
                 <title><xsl:value-of select="$title"/></title>

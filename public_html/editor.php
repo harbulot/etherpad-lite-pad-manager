@@ -2,10 +2,8 @@
 # our standard includes
 require_once('includes/php-lib/org/lockaby/class.configuration.php');
 require_once('includes/php-lib/org/lockaby/class.db.php');
-require_once('includes/php-lib/org/lockaby/class.utilities.php');
 require_once('includes/php-lib/org/lockaby/class.template.php');
 require_once('includes/php-lib/org/lockaby/class.session.php');
-require_once('includes/php-lib/org/lockaby/class.openid.php');
 require_once('includes/php-lib/org/lockaby/etherpad/class.client.php');
 
 # libraries for this application
@@ -21,8 +19,10 @@ $values = $config->loadConfiguration("default");
 $db = new org\lockaby\db;
 $dbh = $db->connect($values['db_database'], $values['db_username'], $values['db_password']);
 
-$session = new org\lockaby\session($dbh, '/notepad');
-session_start();
+$session = new org\lockaby\session($dbh);
+$session->setName('NOTEPAD_SESSION');
+$session->setPath('/');
+$session->start();
 
 if (!is_logged_in()) {
     header('Location: index.php');
@@ -32,69 +32,130 @@ if (!is_logged_in()) {
 # connect to the etherpad API
 $ep = new org\lockaby\etherpad\client($values['apikey'], $values['apiurl']);
 
-$public_group_key = $values['public_group_key'];
-$private_group_key = 'private' . $_SESSION['user_id'];
-
-# create pad groups
-try {
-    $public_group = $ep->createGroupIfNotExistsFor($public_group_key);
-    $public_group_id = $public_group->groupID;
-    $private_group = $ep->createGroupIfNotExistsFor($private_group_key);
-    $private_group_id = $private_group->groupID;
-} catch (Exception $e) {}
-
-$action = $_GET['action'];
+$action = stripslashes($_GET['action']);
 if ($action) {
     print '<?xml version="1.0" encoding="UTF-8" ?>' . "\n";
     print '<response>';
         try {
             if ($action == 'open') {
-                $pad = $_GET['pad'];
-                $group = $_GET['group'];
-                $group_id = "";
-                if ($group === 'public') { $group_id = $public_group_id; }
-                if ($group === 'private') { $group_id = $private_group_id; }
+                $id = stripslashes($_GET['id']);
+                $name = stripslashes($_GET['name']);
+                $is_private = stripslashes($_GET['private']);
 
+                if (!$id || $id === 'null') {
+                    # if no id is given then this is a new notepad
+                    # make sure that this notepad has a name
+                    if (!$name) {
+                        throw new Exception('No name given. Cannot create new notepad without a name.');
+                    }
+
+                    # generate a new id
+                    $id = uniqid('notepad', true);
+
+                    # store the name of the pad
+                    $sth = $dbh->prepare('INSERT INTO pads (id, name, is_private, user_id) VALUES (?, ?, ?, ?)');
+                    $sth->execute(array($id, $name, ($is_private === 'true' ? 1 : 0), $_SESSION['user_id']));
+                    $sth->closeCursor();
+                } else {
+                    # make sure that this user can actually see the pad
+                    $sth = $dbh->prepare('SELECT COUNT(*) FROM pads WHERE id = ? AND (user_id = ? OR is_private = 0)');
+                    $sth->execute(array($id, $_SESSION['user_id']));
+                    list ($count) = $sth->fetch();
+                    $sth->closeCursor();
+
+                    if (!$count) {
+                        throw new Exception('No notepad found. Cannot open this notepad.');
+                    }
+                }
+
+                # create the pad in etherpad
                 try {
                     # this might fail if the pad already exists but that is ok
-                    $ep->createGroupPad($group_id, $pad, "");
+                    $ep->createPad($id, "");
                 } catch (Exception $e) {}
-                $ep->setPublicStatus($group_id . '$' . $pad, "true");
 
                 print '<content>';
-                    print '<entry>' . htmlspecialchars($group_id . '$' . $pad) . '</entry>';
-                    print '<entries>';
+                    print '<notepad id="' . htmlspecialchars($id) . '" private="' . (($is_private === 'true') ? 'true' : 'false') . '">';
+                        print '<![CDATA[' . $name . ']]>';
+                    print '</notepad>';
+                    print '<notepads>';
                         print '<public>';
-                            print get_notepad_entries_xml($ep, $public_group_id);
+                            print get_public_notepads_xml();
                         print '</public>';
                         print '<private>';
-                            print get_notepad_entries_xml($ep, $private_group_id);
+                            print get_private_notepads_xml();
                         print '</private>';
-                    print '</entries>';
+                    print '</notepads>';
                 print '</content>';
             }
-            if ($action == 'delete') {
-                $pad = $_GET['pad'];
-                $group = $_GET['group'];
-                $group_id = "";
-                if ($group === 'public') { $group_id = $public_group_id; }
-                if ($group === 'private') { $group_id = $private_group_id; }
-                $ep->deletePad($group_id . '$' . $pad);
+            if ($action == 'rename') {
+                $id = stripslashes($_GET['id']);
+                $name = stripslashes($_GET['name']);
+                $is_private = stripslashes($_GET['private']);
+
+                # make sure that this user can actually see the pad
+                $sth = $dbh->prepare('SELECT COUNT(*) FROM pads WHERE id = ? AND user_id = ?');
+                $sth->execute(array($id, $_SESSION['user_id']));
+                list ($count) = $sth->fetch();
+                $sth->closeCursor();
+
+                if (!$count) {
+                    throw new Exception('No notepad found or you do not have permission to rename this notepad. Cannot rename this notepad.');
+                } else {
+                    $sth = $dbh->prepare('UPDATE pads SET name = ?, is_private = ? WHERE id = ?');
+                    $sth->execute(array($name, ($is_private === 'true' ? 1 : 0), $id));
+                    $sth->closeCursor();
+                }
+
+                print '<content>';
+                    print '<notepad id="' . htmlspecialchars($id) . '" private="' . (($is_private === 'true') ? 'true' : 'false') . '">';
+                        print '<![CDATA[' . $name . ']]>';
+                    print '</notepad>';
+                    print '<notepads>';
+                        print '<public>';
+                            print get_public_notepads_xml();
+                        print '</public>';
+                        print '<private>';
+                            print get_private_notepads_xml();
+                        print '</private>';
+                    print '</notepads>';
+                print '</content>';
+            }
+            if ($action == 'destroy') {
+                $id = stripslashes($_GET['id']);
+
+                # make sure that this user can actually see the pad
+                $sth = $dbh->prepare('SELECT COUNT(*) FROM pads WHERE id = ? AND user_id = ?');
+                $sth->execute(array($id, $_SESSION['user_id']));
+                list ($count) = $sth->fetch();
+                $sth->closeCursor();
+
+                if (!$count) {
+                    throw new Exception('No notepad found or you do not have permission to delete this notepad. Cannot delete this notepad.');
+                } else {
+                    # first delete from the database
+                    $sth = $dbh->prepare('DELETE FROM pads WHERE id = ?');
+                    $sth->execute(array($id));
+                    $sth->closeCursor();
+
+                    # now delete it from the store
+                    $ep->deletePad($id);
+                }
 
                 print '<content>';
                     print '<result>success</result>';
-                    print '<entries>';
+                    print '<notepads>';
                         print '<public>';
-                            print get_notepad_entries_xml($ep, $public_group_id);
+                            print get_public_notepads_xml();
                         print '</public>';
                         print '<private>';
-                            print get_notepad_entries_xml($ep, $private_group_id);
+                            print get_private_notepads_xml();
                         print '</private>';
-                    print '</entries>';
+                    print '</notepads>';
                 print '</content>';
             }
             if ($action == 'profile') {
-                $username = $_GET['username'];
+                $username = stripslashes($_GET['username']);
                 $sth = $dbh->prepare('UPDATE users SET nickname = ? WHERE id = ?');
                 $sth->execute(array($username, $_SESSION['user_id']));
                 $sth->closeCursor();
@@ -106,14 +167,14 @@ if ($action) {
             if ($action == 'update') {
                 print '<content>';
                     print '<result>success</result>';
-                    print '<entries>';
+                    print '<notepads>';
                         print '<public>';
-                            print get_notepad_entries_xml($ep, $public_group_id);
+                            print get_public_notepads_xml();
                         print '</public>';
                         print '<private>';
-                            print get_notepad_entries_xml($ep, $private_group_id);
+                            print get_private_notepads_xml();
                         print '</private>';
-                    print '</entries>';
+                    print '</notepads>';
                 print '</content>';
             }
             if ($action == 'users') {
@@ -121,10 +182,13 @@ if ($action) {
                     print '<content>';
                         print '<result>success</result>';
                         print '<users>';
-                            $sth = $dbh->prepare('SELECT id, openid, is_enabled, is_manager FROM users ORDER BY openid ASC');
+                            $sth = $dbh->prepare('SELECT id, openid, nickname, is_enabled, is_manager FROM users ORDER BY openid ASC');
                             $sth->execute();
-                            while (list($id, $openid, $is_enabled, $is_manager) = $sth->fetch()) {
-                                print '<user enabled="' . $is_enabled . '" manager="' . $is_manager . '"><![CDATA[' . $openid . ']]></user>';
+                            while (list($id, $openid, $nickname, $is_enabled, $is_manager) = $sth->fetch()) {
+                                print '<user enabled="' . $is_enabled . '" manager="' . $is_manager . '">';
+                                    print '<username><![CDATA[' . $openid . ']]></username>';
+                                    print '<nickname><![CDATA[' . $nickname . ']]></nickname>';
+                                print '</user>';
                             }
                             $sth->closeCursor();
                         print '</users>';
@@ -132,9 +196,9 @@ if ($action) {
                 }
             }
             if ($action == 'toggle') {
-                $username = $_GET['username'];
-                $field = $_GET['field'];
-                $value = $_GET['value'];
+                $username = stripslashes($_GET['username']);
+                $field = stripslashes($_GET['field']);
+                $value = stripslashes($_GET['value']);
                 if ($_SESSION['is_manager']) {
                     if ($field == 'is_manager') {
                         $sth = $dbh->prepare('UPDATE users SET is_manager = ? WHERE openid = LOWER(?)');
@@ -176,10 +240,10 @@ $xml = '<template>';
             $xml .= '<openid>' . $_SESSION['identity'] . '</openid>';
         $xml .= '</user>';
     $xml .= '</editor>';
-    $xml .= '<entries>';
-        $xml .= '<public>' . get_notepad_entries_xml($ep, $public_group_id) . '</public>';
-        $xml .= '<private>' . get_notepad_entries_xml($ep, $private_group_id) . '</private>';
-    $xml .= '</entries>';
+    $xml .= '<notepads>';
+        $xml .= '<public>' . get_public_notepads_xml() . '</public>';
+        $xml .= '<private>' . get_private_notepads_xml() . '</private>';
+    $xml .= '</notepads>';
 $xml .= '</template>';
 
 $tpl->setParameter('title', 'notepad');
