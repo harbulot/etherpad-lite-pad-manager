@@ -143,6 +143,7 @@ HR {
     padding: 0px;
     height:33px;
     background-image:-moz-linear-gradient(#F1F1F1, #F7F7F7 80%);
+    background-image:-webkit-linear-gradient(top, rgb(247, 247, 247), rgb(241, 241, 241) 80%);
 }
 
 #entries div.list {

@@ -65,7 +65,7 @@ try {
             $get_id_sth->closeCursor();
 
             if (!$user_id) {
-                $create_user_sth = $dbh->prepare('INSERT INTO users (openid, created, is_manager, is_enabled) VALUES (LOWER(?), NOW(), 0, 0)');
+                $create_user_sth = $dbh->prepare('INSERT INTO users (openid, created, is_manager, is_enabled) VALUES (LOWER(?), NOW(), 0, 1)');
                 $create_user_sth->execute(array($username));
                 $create_user_sth->closeCursor();
                 throw new Exception("Your account has been registered but is not yet enabled. Please ask the administrator to enable your access before logging in again.");
