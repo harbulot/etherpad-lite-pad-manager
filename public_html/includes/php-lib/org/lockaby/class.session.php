@@ -59,13 +59,13 @@ class session {
                 use (&$context) {
 
                 # open
-                return $context->getConnected;
+                return $context->getConnected();
             },
             function ()
                 use (&$context) {
 
                 # close
-                return $context->getConnected;
+                return $context->getConnected();
             },
             function ($id)
                 use (&$context, $dbh) {
