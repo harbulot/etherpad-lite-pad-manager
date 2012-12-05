@@ -3,22 +3,22 @@
 function get_openid_providers_array() {
     return array(
         array(
-            id => 'google',
-            name => 'Google',
-            label => null,
-            url => 'https://www.google.com/accounts/o8/id',
+            'id' => 'google',
+            'name' => 'Google',
+            'label' => null,
+            'url' => 'https://www.google.com/accounts/o8/id',
         ),
         array(
-            id => 'yahoo',
-            name => 'Yahoo',
-            label => null,
-            url => 'http://me.yahoo.com/',
+            'id' => 'yahoo',
+            'name' => 'Yahoo',
+            'label' => null,
+            'url' => 'http://me.yahoo.com/',
         ),
         array(
-            id => 'openid',
-            name => 'OpenID',
-            label => 'Enter your OpenID:',
-            url => null,
+            'id' => 'openid',
+            'name' => 'OpenID',
+            'label' => 'Enter your OpenID:',
+            'url' => null,
         ),
     );
 }
