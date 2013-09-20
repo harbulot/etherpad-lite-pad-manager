@@ -15,3 +15,19 @@ INSTALLATION
 
 See the file INSTALL
 
+
+-----------------------------------------------------------------------------
+
+This is a modified version that uses PostgreSQL instead of MySQL.
+
+The main changes are:
+
+- The PDO connection string uses "pgsql" instead of "mysql".
+- The PDO connection string uses "host=localhost". Otherwise the PostgreSQL
+  client will try to authenticate with ident as the user running the web 
+  server, via the unix socket, conflicting with the db_username settings.
+  The db_host (in configuration/default) isn't used anywhere in the code.
+- There is no REPLACE in PostgreSQL, so it was replaced with a DELETE+INSERT.
+- The table and index creation file was also adapted.
+
+

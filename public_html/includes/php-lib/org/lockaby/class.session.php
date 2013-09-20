@@ -19,7 +19,7 @@ class session {
             $this->_dbh = $p1;
         } elseif ($p1 && gettype($p1) == 'string' && $p2 && gettype($p2) == 'string' && $p3 && gettype($p3) == 'string') {
             try {
-                $dbh = new \PDO('mysql:dbname=' . $p1, $p2, $p3, array(\PDO::ATTR_PERSISTENT => true));
+                $dbh = new \PDO('pgsql:dbname=' . $p1.';host=localhost', $p2, $p3, array(\PDO::ATTR_PERSISTENT => true));
 
                 // we're doing this dumb kludge because PHP PDO doesn't support buffered queries by default
                 // (by the way, perl does, why the fuck am i using php?)
@@ -89,7 +89,9 @@ class session {
 
                 # write
                 try {
-                    $sth = $dbh->prepare('REPLACE INTO sessions (id, data, last_access) VALUES (?, ?, ?)');
+                    $sth = $dbh->prepare('DELETE FROM sessions WHERE id=?');
+                    $sth->execute(array($id));
+                    $sth = $dbh->prepare('INSERT INTO sessions (id, data, last_access) VALUES (?, ?, ?)');
                     $sth->execute(array($id, $data, time()));
                     $sth->closeCursor();
                 } catch (Exception $e) {
